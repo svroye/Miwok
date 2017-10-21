@@ -2,6 +2,7 @@ package com.example.android.miwok;
 
 import android.content.Context;
 import android.media.Image;
+import android.media.MediaPlayer;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -60,18 +61,20 @@ public class WordAdapter extends ArrayAdapter<Words> {
         }
 
         // Get the {@link Words} object located at this position in the list
-        Words currentWord = getItem(position);
+        final Words currentWord = getItem(position);
 
         LinearLayout linearLayout = (LinearLayout) listItemView.findViewById(R.id.linear_layout);
         linearLayout.setBackgroundResource(mCategoryColor);
         // Find the TextView in the list_item.xml layout with the ID english_word
-        TextView englishTranslationTextView = (TextView) listItemView.findViewById(R.id.english_word);
+        TextView englishTranslationTextView = (TextView) listItemView.findViewById(
+                R.id.english_word);
         // Get the English Translation from the current Words object and
         // set this text on the TextView
         englishTranslationTextView.setText(currentWord.getEnglishTranslation());
 
         // Find the TextView in the list_item.xml layout with the ID miwok_word
-        TextView miwokTranslationTextView = (TextView) listItemView.findViewById(R.id.miwok_word);
+        TextView miwokTranslationTextView = (TextView) listItemView.findViewById(
+                R.id.miwok_word);
         // Get the miwok Translation from the current Words object and
         // set this text on the TextView
         miwokTranslationTextView.setText(currentWord.getmMiwokTranslation());
@@ -88,7 +91,6 @@ public class WordAdapter extends ArrayAdapter<Words> {
             // no image, so hide the View
             wordImage.setVisibility(View.GONE);
         }
-
 
         // Return the whole list item layout (containing 2 TextViews)
         // so that it can be shown in the ListView

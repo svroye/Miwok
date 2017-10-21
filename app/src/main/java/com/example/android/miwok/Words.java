@@ -15,14 +15,18 @@ public class Words {
     // constant holding a value for when no image was provided
     private static final int NO_IMAGE_PROVIDED = -1;
 
+    private int mAudioResource;
+
     /**
      * create a new Word object
      * @param englishTranslation is the English translation of the word
      * @param miwokTranslation is the Miwok translation of the word
+     * @param audioResource id of the audio resource of the word
      */
-    public Words(String englishTranslation, String miwokTranslation ){
+    public Words(String englishTranslation, String miwokTranslation, int audioResource){
         mEnglishTranslation = englishTranslation;
         mMiwokTranslation = miwokTranslation;
+        mAudioResource = audioResource;
     }
 
     /**
@@ -30,11 +34,13 @@ public class Words {
      * @param englishTranslation is the English translation of the word
      * @param miwokTranslation is the Miwok translation of the word
      * @param imageResource is the image resource id of the word
+     * @param audioResource id of the audio resource of the word
      */
-    public Words(String englishTranslation, String miwokTranslation, int imageResource ){
+    public Words(String englishTranslation, String miwokTranslation, int imageResource,int audioResource ){
         mEnglishTranslation = englishTranslation;
         mMiwokTranslation = miwokTranslation;
         mImageResource = imageResource;
+        mAudioResource = audioResource;
     }
 
     /**
@@ -68,5 +74,13 @@ public class Words {
      */
     public boolean hasImage(){
         return mImageResource != NO_IMAGE_PROVIDED;
+    }
+
+    /**
+     * get the audio resource id of the current word
+     * @return id of the audio resource
+     */
+    public int getAudioResource() {
+        return mAudioResource;
     }
 }

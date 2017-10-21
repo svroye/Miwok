@@ -15,29 +15,44 @@
  */
 package com.example.android.miwok;
 
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class NumbersActivity extends AppCompatActivity {
 
+    //mediaplayer object to play the audio files
+    private MediaPlayer mMediaPlayer;
+
+    // listener for when the audio has finished playing
+    private MediaPlayer.OnCompletionListener onCompletionListener = new MediaPlayer.OnCompletionListener() {
+        @Override
+        public void onCompletion(MediaPlayer mediaPlayer) {
+            releaseMediaPlayer();
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
-        ArrayList<Words> words = new ArrayList<Words>();
-        words.add(new Words("one","lutti", R.drawable.number_one));
-        words.add(new Words("two","otiiko", R.drawable.number_two));
-        words.add(new Words("three","tolookosu", R.drawable.number_three));
-        words.add(new Words("four","oyyisa", R.drawable.number_four));
-        words.add(new Words("five","massokka", R.drawable.number_five));
-        words.add(new Words("six","temmokka", R.drawable.number_six));
-        words.add(new Words("seven","kenekaku", R.drawable.number_seven));
-        words.add(new Words("eight","kawinta", R.drawable.number_eight));
-        words.add(new Words("nine","wo'e", R.drawable.number_nine));
-        words.add(new Words("ten","na'aacha", R.drawable.number_ten));
+        final ArrayList<Words> words = new ArrayList<Words>();
+        words.add(new Words("one","lutti", R.drawable.number_one, R.raw.number_one));
+        words.add(new Words("two","otiiko", R.drawable.number_two, R.raw.number_two));
+        words.add(new Words("three","tolookosu", R.drawable.number_three, R.raw.number_three));
+        words.add(new Words("four","oyyisa", R.drawable.number_four, R.raw.number_four));
+        words.add(new Words("five","massokka", R.drawable.number_five, R.raw.number_five));
+        words.add(new Words("six","temmokka", R.drawable.number_six, R.raw.number_six));
+        words.add(new Words("seven","kenekaku", R.drawable.number_seven, R.raw.number_seven));
+        words.add(new Words("eight","kawinta", R.drawable.number_eight, R.raw.number_eight));
+        words.add(new Words("nine","wo'e", R.drawable.number_nine, R.raw.number_nine));
+        words.add(new Words("ten","na'aacha", R.drawable.number_ten, R.raw.number_ten));
 
 
         // Create an {@link ArrayAdapter}, whose data source is a list of Strings. The
@@ -59,7 +74,39 @@ public class NumbersActivity extends AppCompatActivity {
         // 1 argument, which is the {@link ArrayAdapter} with the variable name itemsAdapter.
         listView.setAdapter(itemsAdapter);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                // create and setup the mediaplayer with the audiofile of the list item that
+                // the user clicked
+                releaseMediaPlayer();
+                mMediaPlayer = MediaPlayer.create(NumbersActivity.this,
+                        words.get(i).getAudioResource());
+                // start the audio file
+                mMediaPlayer.start();
+
+                // set up an onCompletionListener, which is called when the audio file is finished
+                mMediaPlayer.setOnCompletionListener(onCompletionListener);
+            }
+        });
+
     }
 
+    private void releaseMediaPlayer(){
+        // if the mediaplayer is not null
+        if (mMediaPlayer != null){
+            // release the resources
+            mMediaPlayer.release();
+            // restore the variable
+            mMediaPlayer = null;
+            Log.i(NumbersActivity.class.toString(), "Released");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+    }
 }
 
