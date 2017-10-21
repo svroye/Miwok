@@ -10,6 +10,8 @@ public class Words {
     private String mEnglishTranslation;
     // Miwok translation of the word
     private String mMiwokTranslation;
+    // holds the image resource id
+    private int mImageResource;
 
     /**
      * create a new Word object
@@ -19,6 +21,18 @@ public class Words {
     public Words(String englishTranslation, String miwokTranslation ){
         mEnglishTranslation = englishTranslation;
         mMiwokTranslation = miwokTranslation;
+    }
+
+    /**
+     * create a new Word object
+     * @param englishTranslation is the English translation of the word
+     * @param miwokTranslation is the Miwok translation of the word
+     * @param imageResource is the image resource id of the word
+     */
+    public Words(String englishTranslation, String miwokTranslation, int imageResource ){
+        mEnglishTranslation = englishTranslation;
+        mMiwokTranslation = miwokTranslation;
+        mImageResource = imageResource;
     }
 
     /**
@@ -35,5 +49,13 @@ public class Words {
      */
     public String getmMiwokTranslation() {
         return mMiwokTranslation;
+    }
+
+    /**
+     * get the image resource id for the Word
+     * @return int holding the image resource id
+     */
+    public int getImageResource() {
+        return mImageResource;
     }
 }
