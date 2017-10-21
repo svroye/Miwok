@@ -4,35 +4,43 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:minHeight="@dimen/list_item_height"
+    android:background="@color/tan_background">
 
     <ImageView
         android:id="@+id/image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@mipmap/ic_launcher"/>
+        android:layout_width="@dimen/list_item_height"
+        android:layout_height="@dimen/list_item_height"/>
 
     <LinearLayout
+        android:id="@+id/linear_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/list_item_height"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:paddingLeft="16dp">
 
         <TextView
             android:id="@+id/miwok_word"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
             tools:text="Miwok"
-            android:textSize="16sp"/>
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"/>
 
         <TextView
             android:layout_below="@id/miwok_word"
             android:id="@+id/english_word"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="top"
             tools:text="English"
-            android:textSize="16sp"/>
+            android:textSize="18sp"
+            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 
