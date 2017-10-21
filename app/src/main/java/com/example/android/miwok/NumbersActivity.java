@@ -17,10 +17,7 @@ package com.example.android.miwok;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -29,18 +26,18 @@ public class NumbersActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_numbers);
-        ArrayList<String> words = new ArrayList<String>();
-        words.add("one");
-        words.add("two");
-        words.add("three");
-        words.add("four");
-        words.add("five");
-        words.add("six");
-        words.add("seven");
-        words.add( "eight");
-        words.add("nine");
-        words.add("ten");
+        setContentView(R.layout.word_list);
+        ArrayList<Words> words = new ArrayList<Words>();
+        words.add(new Words("one","lutti"));
+        words.add(new Words("two","otiiko"));
+        words.add(new Words("three","tolookosu"));
+        words.add(new Words("four","oyyisa"));
+        words.add(new Words("five","massokka"));
+        words.add(new Words("six","temmokka"));
+        words.add(new Words("seven","kenekaku"));
+        words.add(new Words("eight","kawinta"));
+        words.add(new Words("nine","wo'e"));
+        words.add(new Words("ten","na'aacha"));
 
 
         // Create an {@link ArrayAdapter}, whose data source is a list of Strings. The
@@ -48,12 +45,12 @@ public class NumbersActivity extends AppCompatActivity {
         // simple_list_item_1.xml layout resource defined in the Android framework.
         // This list item layout contains a single {@link TextView}, which the adapter will set to
         // display a single word.
-        ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, words);
+        WordAdapter itemsAdapter =
+                new WordAdapter(this, words);
 
         // Find the {@link ListView} object in the view hierarchy of the {@link Activity}.
         // There should be a {@link ListView} with the view ID called list, which is declared in the
-        // activity_numbers.xml layout file.
+        // word_listyout file.
         ListView listView = (ListView) findViewById(R.id.list);
 
         // Make the {@link ListView} use the {@link ArrayAdapter} we created above, so that the
