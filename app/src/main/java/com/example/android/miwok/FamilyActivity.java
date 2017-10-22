@@ -15,6 +15,8 @@
  */
 package com.example.android.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,10 +40,36 @@ public class FamilyActivity extends AppCompatActivity {
         }
     };
 
+    // handles audio focus
+    private AudioManager mAudioManager;
+
+    AudioManager.OnAudioFocusChangeListener afChangeListener =
+            new AudioManager.OnAudioFocusChangeListener() {
+                public void onAudioFocusChange(int focusChange) {
+                    if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange ==
+                            AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
+                        // lost focus, pause the audio
+                        mMediaPlayer.pause();
+                        // go back to start of the audio file
+                        mMediaPlayer.seekTo(0);
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+                        releaseMediaPlayer();
+                        mAudioManager.abandonAudioFocus(afChangeListener);
+                    } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
+                        // gain focus, start audio
+                        mMediaPlayer.start();
+                    }
+                }
+            };
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.word_list);
+
+        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         final ArrayList<Words> words = new ArrayList<Words>();
         words.add(new Words("father","əpə", R.drawable.family_father, R.raw.family_father));
         words.add(new Words("mother","əta", R.drawable.family_mother, R.raw.family_mother));
@@ -77,16 +105,24 @@ public class FamilyActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Words word = words.get(i);
                 // create and setup the mediaplayer with the audiofile of the list item that
                 // the user clicked
                 releaseMediaPlayer();
-                mMediaPlayer = MediaPlayer.create(FamilyActivity.this,
-                        words.get(i).getAudioResource());
-                // start the audio file
-                mMediaPlayer.start();
 
-                // set up an onCompletionListener, which is called when the audio file is finished
-                mMediaPlayer.setOnCompletionListener(onCompletionListener);
+                //request audio focus for music and for a short period of time
+                int requestResponse = mAudioManager.requestAudioFocus(afChangeListener,
+                        AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+                if (requestResponse == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mMediaPlayer = MediaPlayer.create(FamilyActivity.this,
+                            word.getAudioResource());
+                    // start the audio file
+                    mMediaPlayer.start();
+
+                    // set up an onCompletionListener, which is called when the audio file is finished
+                    mMediaPlayer.setOnCompletionListener(onCompletionListener);
+                }
             }
         });
     }
@@ -98,7 +134,8 @@ public class FamilyActivity extends AppCompatActivity {
             mMediaPlayer.release();
             // restore the variable
             mMediaPlayer = null;
-            Log.i(NumbersActivity.class.toString(), "Released");
+            // release the audio focus
+            mAudioManager.abandonAudioFocus(afChangeListener);
         }
     }
 
